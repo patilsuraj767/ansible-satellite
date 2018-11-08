@@ -8,7 +8,6 @@
         name: rhevdeploy
       
 - hosts: "{{ hostvars['localhost']['hostname'].msg }}"
-  gather_facts: yes
   tasks:
     - name: configure VM for installing satellite 
       tags: configure-vm

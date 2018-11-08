@@ -1,67 +1,64 @@
 ---
 # tasks file for rhevdeploy
-- name: Display all variables/facts known for a host
-  debug:
-    var: rhevpassword
 
-# - name: Create VM on RHEV
-#   uri:
-#     url: "{{ rhevurl }}/vms"
-#     method: POST
-#     user: "{{ rhevusername }}"
-#     password: "{{ rhevpassword }}"
-#     body: "<vm><name>{{ vmname }}</name><description>Satellite</description><cluster><name>Test</name></cluster><template><name>RHEL7.2</name></template><memory>8589934592</memory><os><boot><devices><device>hd</device></devices></boot></os></vm>"
-#     return_content: yes
-#     status_code: 202, 200
-#     headers:
-#       Version: 4
-#       Accept: "application/xml"
-#       Content-type: application/xml
-#   register: vmcreated
+- name: Create VM on RHEV
+  uri:
+    url: "{{ rhevurl }}/vms"
+    method: POST
+    user: "{{ rhevusername }}"
+    password: "{{ rhevpassword }}"
+    body: "<vm><name>{{ vmname }}</name><description>Satellite</description><cluster><name>Test</name></cluster><template><name>RHEL7.2</name></template><memory>8589934592</memory><os><boot><devices><device>hd</device></devices></boot></os></vm>"
+    return_content: yes
+    status_code: 202, 200
+    headers:
+      Version: 4
+      Accept: "application/xml"
+      Content-type: application/xml
+  register: vmcreated
 
-# - name: Retrive VM ID
-#   xml:
-#     xmlstring: "{{ vmcreated.content }}"
-#     xpath: /vm
-#     content: attribute
-#     attribute: id
-#   register: vmid
+- name: Retrive VM ID
+  xml:
+    xmlstring: "{{ vmcreated.content }}"
+    xpath: /vm
+    content: attribute
+    attribute: id
+  register: vmid
 
-# - pause:
-#     seconds: 40
+- pause:
+    seconds: 40
 
-# - name: Adding 80GB storage 
-#   uri: 
-#     url: "{{ rhevurl }}/vms/{{ vmid.matches[0].vm.id }}/diskattachments"
-#     method: POST
-#     user: "{{ rhevusername }}"
-#     password: "{{ rhevpassword }}"
-#     return_content: yes
-#     body: "<disk_attachment><bootable>false</bootable><interface>virtio_scsi</interface><active>true</active><disk><description>extra80gb</description><format>cow</format><name>extra</name><provisioned_size>80589934592</provisioned_size><storage_domains><storage_domain><name>6pnq2-test-vm-storage6</name></storage_domain></storage_domains></disk></disk_attachment>"
-#     status_code: 201, 200
-#     headers:
-#       Version: 4
-#       Accept: "application/xml"
-#       Content-type: "application/xml"
+- name: Adding 80GB storage 
+  uri: 
+    url: "{{ rhevurl }}/vms/{{ vmid.matches[0].vm.id }}/diskattachments"
+    method: POST
+    user: "{{ rhevusername }}"
+    password: "{{ rhevpassword }}"
+    return_content: yes
+    body: "<disk_attachment><bootable>false</bootable><interface>virtio_scsi</interface><active>true</active><disk><description>extra80gb</description><format>cow</format><name>extra</name><provisioned_size>80589934592</provisioned_size><storage_domains><storage_domain><name>6pnq2-test-vm-storage6</name></storage_domain></storage_domains></disk></disk_attachment>"
+    status_code: 201, 200
+    headers:
+      Version: 4
+      Accept: "application/xml"
+      Content-type: "application/xml"
 
-# - pause:
-#     seconds: 30
+- pause:
+    seconds: 30
 
-# - name: Starting VM 
-#   uri: 
-#     url: "{{ rhevurl }}/vms/{{ vmid.matches[0].vm.id }}/start"
-#     method: POST
-#     user: "{{ rhevusername }}"
-#     password: "{{ rhevpassword }}"
-#     return_content: yes
-#     body: "<action/>"
-#     headers:
-#       Version: 4
-#       Accept: "application/xml"
-#       Content-type: "application/xml"
+- name: Starting VM 
+  uri: 
+    url: "{{ rhevurl }}/vms/{{ vmid.matches[0].vm.id }}/start"
+    method: POST
+    user: "{{ rhevusername }}"
+    password: "{{ rhevpassword }}"
+    return_content: yes
+    body: "<action/>"
+    headers:
+      Version: 4
+      Accept: "application/xml"
+      Content-type: "application/xml"
 
-# - pause:
-#     minutes: 2
+- pause:
+    minutes: 2
 
 - name: Getting NIC details of the system.
   tags: nicdata
