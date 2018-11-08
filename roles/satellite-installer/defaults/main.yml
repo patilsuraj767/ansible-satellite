@@ -1,5 +1,5 @@
 ---
 # defaults file for satellite-installer
-satellite-version: "6.4"
+satellite_version: "6.4"
 activationkey: "test"
 org_id: "12345"

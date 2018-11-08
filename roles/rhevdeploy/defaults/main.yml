@@ -4,7 +4,7 @@
 vmid: "9211c025-df6e-4578-8eff-7a19d84cccf7"
 
 rhevurl: "https://lab-rhevm.gsslab.pnq2.redhat.com/ovirt-engine/api"
-awxurl: "http://vm251-89.gsslab.pnq2.redhat.com/api/v2/"
+awxurl: "http://vm251-89.gsslab.pnq2.redhat.com/api/v2"
 ansibleuser: inventoryuser
 ansiblepassword: test
 rhevusername: rhevadmin@gsslab.pnq2.redhat.com

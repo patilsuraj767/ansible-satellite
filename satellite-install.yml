@@ -7,7 +7,7 @@
       include_role:
         name: rhevdeploy
       
-- hosts: "{{ hostname.msg }}"
+- hosts: "{{ hostvars['localhost']['hostname'].msg }}"
   gather_facts: yes
   tasks:
     - name: configure VM for installing satellite 

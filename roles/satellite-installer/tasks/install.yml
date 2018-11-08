@@ -1,5 +1,5 @@
 ---
-- name: Installing Satellite "{{ satellite-version }}" packages
+- name: Installing Satellite "{{ satellite_version }}" packages
   yum:
     name: satellite
     state: latest
