@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Deploy VM
+      tags: deploy-vm  
+      include_role:
+        name: rhevdeploy
+      
+- hosts: "{{ hostname.msg }}"
+  gather_facts: yes
+  tasks:
+    - name: configure VM for installing satellite 
+      tags: configure-vm
+      include_role:
+        name: configurevm
+
+    - name: Installing satellite
+      tags: satellite-installer
+      include_role:
+        name: satellite-installer
+      

@@ -1,0 +1,25 @@
+---
+- name: Registering and Subscribing System
+  redhat_subscription:
+    state: present
+    activationkey: "{{ activationkey }}"
+    org_id: "{{ org_id }}"
+
+- name: Disabling all repositories.
+  rhsm_repository:
+    name: '*'
+    state: disabled  
+
+- name: Enabling required repository
+  rhsm_repository:
+    name: rhel-7-server-rpms, rhel-server-rhscl-7-rpms, rhel-7-server-satellite-"{{ satellite-version }}"-rpms
+
+- name: Enabling puppet 4 repository
+  rhsm_repository:
+    name: rhel-7-server-satellite-"{{ satellite-version }}"-puppet4-rpms
+  when: satellite-version == "6.3"
+
+- name: Enabling Ansible repository
+  rhsm_repository:
+    name: rhel-7-server-ansible-2.6-rpms, rhel-7-server-satellite-maintenance-6-rpms
+  when: satellite-version == "6.4"

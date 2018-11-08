@@ -1,0 +1,29 @@
+---
+# tasks file for configurevm
+
+- name: Increasing root volume group size
+  lvg:
+    vg: rhel_vm253-73
+    pvs: /dev/vda2,/dev/sda
+
+- name: Increasing root LV size
+  lvol:
+    vg: rhel_vm253-73
+    lv: root
+    size: +100%FREE
+    resizefs: true
+
+- name: Stoping firewalld
+  service:
+    name: firewalld
+    state: stopped
+    enabled: no
+
+# hostname.msg variable is shared from role rhevdeploy, Need to improve the logic of getting hostname. 
+# Also, unable to use hostname module as hostvars['localhost']['hostname'].msg return the hostname with "." at the end. 
+- name: Setting hostname to "{{ hostvars['localhost']['hostname'].msg }}"
+  command: hostnamectl set-hostname "{{ hostvars['localhost']['hostname'].msg }}"
+  tags: set-hostname
+  
+
+

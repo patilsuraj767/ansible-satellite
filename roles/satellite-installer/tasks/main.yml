@@ -1,0 +1,6 @@
+---
+# tasks file for satellite-installer
+- import_tasks: subscription-manager.yml
+  tags: subscription-manager
+
+- import_tasks: install.yml
