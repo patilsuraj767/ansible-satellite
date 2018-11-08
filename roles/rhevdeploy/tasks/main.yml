@@ -110,6 +110,7 @@
 
 - name:
   command: curl -k -X POST -H "Content-Type:application/json" -u inventoryuser:test http://vm251-89.gsslab.pnq2.redhat.com/api/v2/inventories/2/hosts/ -d '{"name":"{{ hostname.msg }}"}' 
-  warn: no
+  args:
+    warn: no
 
 
