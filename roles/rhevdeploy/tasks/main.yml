@@ -87,33 +87,6 @@
   register: hostname
   tags: nicdata
 
-#Below API returns Error 401 Authentication credentials were not provided. To establish a login session
-
-# - name: Adding system to the Ansible Inventory.
-#   uri:
-#     url: "{{ awxurl }}/inventories/2/hosts/"    
-#     method: GET
-#     user: inventoryuser
-#     password: test 
-#     body: '{"name": "vm251-3333.gsslab.pnq2.redhat.com."}'
-#     headers:
-#       Content-type: application/json
-#     tags: add-host-to-ansible
-
-######### ERROR LOG from tower ########################
-#2018-11-08 18:54:40,392 INFO     awx.api.generics status 401 received by user AnonymousUser attempting to access /api/v2/inventories/2/hosts/ from 10.40.204.39
-#[pid: 134|app: 0|req: 4/12] 10.40.204.39 () {38 vars in 539 bytes} [Thu Nov  8 18:54:40 2018] POST /api/v2/inventories/2/hosts/ => generated 107 bytes in 63 msecs (HTTP/1.1 401) 9 headers in 311 bytes (1 switches on core 0)
-#10.40.204.39 - - [08/Nov/2018:18:54:40 +0000] "POST /api/v2/inventories/2/hosts/ HTTP/1.1" 401 107 "-" "ansible-httpget" "-"
-############################################
-
-
-
-# Alternate to the above API call.. 
-# using internal bridge connection 172.17.0.5:8052, unable to use docker host IP or hostname(vm251-89.gsslab.pnq2.redhat.com) | Throwing error no route to host. | Need to be fixed. Something wrong with the docker bridge
-
-- name:
-  command: curl -k -X POST -H "Content-Type:application/json" -u inventoryuser:test http://172.17.0.5:8052/api/v2/inventories/2/hosts/ -d '{"name":"{{ hostname.msg }}"}' 
-  args:
-    warn: no
-
-
+- name: Adding system to the Ansible Inventory.
+  add_host:
+    name: "{{ hostname.msg }}"
