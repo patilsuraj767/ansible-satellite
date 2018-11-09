@@ -106,11 +106,14 @@
 #10.40.204.39 - - [08/Nov/2018:18:54:40 +0000] "POST /api/v2/inventories/2/hosts/ HTTP/1.1" 401 107 "-" "ansible-httpget" "-"
 ############################################
 
+
+
 # Alternate to the above API call.. 
+# using internal bridge connection 172.17.0.5:8052, unable to use docker host IP or hostname(vm251-89.gsslab.pnq2.redhat.com) | Throwing error no route to host. | Need to be fixed. Something wrong with the docker bridge
 
 - name:
-  command: curl -k -X POST -H "Content-Type:application/json" -u inventoryuser:test http://vm251-89.gsslab.pnq2.redhat.com/api/v2/inventories/2/hosts/ -d '{"name":"{{ hostname.msg }}"}' 
+  command: curl -k -X POST -H "Content-Type:application/json" -u inventoryuser:test http://172.17.0.5:8052/api/v2/inventories/2/hosts/ -d '{"name":"{{ hostname.msg }}"}' 
   args:
     warn: no
-
+    
 
