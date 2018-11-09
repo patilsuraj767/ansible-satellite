@@ -1,0 +1,5 @@
+---
+# tasks file for capsule-installer
+- import_tasks: subscription-manager.yml
+
+- import_tasks: install.yml

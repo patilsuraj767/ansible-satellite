@@ -1,0 +1,8 @@
+---
+# defaults file for capsule-installer
+capsule_version: "6.4"
+activationkey: "test"
+org_id: "12345"
+satellite_username: "admin"
+satellite_password: "redhat"
+organization_name: "RedHat"

@@ -1,0 +1,29 @@
+---
+# tasks file for generate-capsule-certs
+
+- name: Generating capsule certs for 6.2
+  command: capsule-certs-generate --capsule-fqdn {{ hostvars['localhost']['hostname'].msg }} --certs-tar {{ hostvars['localhost']['hostname'].msg }}-certs.tar
+  when: capsule_version == "6.2"
+
+- name: Generating capsule certs for 6.3
+  command: capsule-certs-generate --foreman-proxy-fqdn {{ hostvars['localhost']['hostname'].msg }} --certs-tar {{ hostvars['localhost']['hostname'].msg }}-certs.tar
+  when: capsule_version == "6.3" or capsule_version == "6.4"
+
+
+- name: Fetching {{ hostvars['localhost']['hostname'].msg }}-certs.tar
+  fetch:
+    src: /root/{{ hostvars['localhost']['hostname'].msg }}-certs.tar
+    dest: /tmp/{{ hostvars['localhost']['hostname'].msg }}-certs.tar
+    flat: yes
+
+- name: Getting oauth consumer key
+  command: bash -c "grep oauth_consumer_key /etc/foreman/settings.yaml | awk '{print $2}'"
+  register: oauth_consumer_key
+
+- name: Getting oauth consumer secret
+  command: bash -c "grep oauth_consumer_secret /etc/foreman/settings.yaml | awk '{print $2}'"
+  register: oauth_consumer_secret
+
+- name: Getting Pulp oauth_secret
+  command: bash -c "grep ^oauth_secret /etc/pulp/server.conf | awk '{print $2}'"
+  register: pulp_oauth_secret

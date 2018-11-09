@@ -1,0 +1,70 @@
+---
+
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+
+- name: Installing Capsule "{{ capsule_version }}" packages
+  yum:
+    name: satellite-capsule
+    state: latest
+
+- pause:
+    seconds: 30
+
+- name: Copying {{ hostvars['localhost']['hostname'].msg }}-certs.tar
+  copy:
+    src: /tmp/{{ hostvars['localhost']['hostname'].msg }}-certs.tar
+    dest: /root/{{ hostvars['localhost']['hostname'].msg }}-certs.tar
+    owner: root
+    group: root
+    mode: 0777
+
+
+# Below two steps/action are going to fail as server is not register and subscribe to the satellite server
+# Running satellite-installer so that installer will install the require packages from CDN 
+# Need to build/improve the logic to install the capsule required packages from CDN 
+
+- name: Configuring Capsule 6.2
+  command: satellite-installer --scenario capsule --capsule-parent-fqdn "{{ satellite_server }}" --foreman-proxy-register-in-foreman "true" --foreman-proxy-foreman-base-url "https://{{ satellite_server }}" --foreman-proxy-trusted-hosts "{{ satellite_server }}" --foreman-proxy-trusted-hosts "{{ hostvars['localhost']['hostname'].msg }}" --foreman-proxy-oauth-consumer-key "{{ hostvars[satellite_server]['oauth_consumer_key']['stdout'] }}" --foreman-proxy-oauth-consumer-secret {{ hostvars[satellite_server]['oauth_consumer_secret']['stdout'] }} --capsule-pulp-oauth-secret {{ hostvars[satellite_server]['pulp_oauth_secret']['stdout'] }} --capsule-certs-tar "/root/{{ hostvars['localhost']['hostname'].msg }}-certs.tar"
+  register: command_result
+  failed_when: "'XYZZZZ' in command_result.stderr"
+  when: capsule_version == "6.2"
+
+- name: Configuring Capsule 6.3 
+  command: satellite-installer --scenario capsule --foreman-proxy-content-parent-fqdn {{ satellite_server }} --foreman-proxy-register-in-foreman true --foreman-proxy-foreman-base-url https://{{ satellite_server }} --foreman-proxy-trusted-hosts {{ satellite_server }} --foreman-proxy-trusted-hosts {{ hostvars['localhost']['hostname'].msg }} --foreman-proxy-oauth-consumer-key {{ hostvars[satellite_server]['oauth_consumer_key']['stdout'] }} --foreman-proxy-oauth-consumer-secret {{ hostvars[satellite_server]['oauth_consumer_secret']['stdout'] }} --foreman-proxy-content-pulp-oauth-secret {{ hostvars[satellite_server]['pulp_oauth_secret']['stdout'] }} --foreman-proxy-content-certs-tar /root/{{ hostvars['localhost']['hostname'].msg }}-certs.tar
+  register: command_result
+  failed_when: "'XYZZZZ' in command_result.stderr"
+  when: capsule_version == "6.3" or capsule_version == "6.4"  
+
+# Now registering the system to the satellite server and rerunning the installer. 
+
+- name: Installing katello-ca-consumer-latest.noarch.rpm
+  yum:
+    name: http://{{ satellite_server }}/pub/katello-ca-consumer-latest.noarch.rpm
+    state: present 
+
+- name: Registering to satellite satellite
+  command: subscription-manager register --username {{ satellite_username }} --password {{ satellite_password }} --org {{ organization_name }} --environment="Library" 
+
+- name: Subscribing to satellite server.
+  command: subscription-manager attach --auto
+  ignore_errors: yes
+
+- name: Configuring Capsule 6.2
+  command: satellite-installer --scenario capsule --capsule-parent-fqdn "{{ satellite_server }}" --foreman-proxy-register-in-foreman "true" --foreman-proxy-foreman-base-url "https://{{ satellite_server }}" --foreman-proxy-trusted-hosts "{{ satellite_server }}" --foreman-proxy-trusted-hosts "{{ hostvars['localhost']['hostname'].msg }}" --foreman-proxy-oauth-consumer-key "{{ hostvars[satellite_server]['oauth_consumer_key']['stdout'] }}" --foreman-proxy-oauth-consumer-secret {{ hostvars[satellite_server]['oauth_consumer_secret']['stdout'] }} --capsule-pulp-oauth-secret {{ hostvars[satellite_server]['pulp_oauth_secret']['stdout'] }} --capsule-certs-tar "/root/{{ hostvars['localhost']['hostname'].msg }}-certs.tar"
+  register: command_result
+  failed_when: "'XYZZZZ' in command_result.stderr"
+  when: capsule_version == "6.2"
+
+- name: Configuring Capsule 6.3 
+  command: satellite-installer --scenario capsule --foreman-proxy-content-parent-fqdn {{ satellite_server }} --foreman-proxy-register-in-foreman true --foreman-proxy-foreman-base-url https://{{ satellite_server }} --foreman-proxy-trusted-hosts {{ satellite_server }} --foreman-proxy-trusted-hosts {{ hostvars['localhost']['hostname'].msg }} --foreman-proxy-oauth-consumer-key {{ hostvars[satellite_server]['oauth_consumer_key']['stdout'] }} --foreman-proxy-oauth-consumer-secret {{ hostvars[satellite_server]['oauth_consumer_secret']['stdout'] }} --foreman-proxy-content-pulp-oauth-secret {{ hostvars[satellite_server]['pulp_oauth_secret']['stdout'] }} --foreman-proxy-content-certs-tar /root/{{ hostvars['localhost']['hostname'].msg }}-certs.tar
+  register: command_result
+  failed_when: "'XYZZZZ' in command_result.stderr"
+  when: capsule_version == "6.3" or capsule_version == "6.4"
+
+
+
+
+

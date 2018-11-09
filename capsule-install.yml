@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Deploy VM
+      tags: deploy-vm  
+      include_role:
+        name: rhevdeploy
+
+    - name: Adding satellite server to inventory
+      add_host:
+        name: "{{ satellite_server }}"
+
+- hosts: "{{ satellite_server }}"
+  tasks:
+    - name : Generating capsule certs on satellite
+      include_role:
+        name: generate-capsule-certs
+
+- hosts: "{{ hostvars['localhost']['hostname'].msg }}"
+  tasks:
+    - name: configure VM for installing satellite 
+      tags: configure-vm
+      include_role:
+        name: configurevm
+
+    - name: Installing Capsule
+      include_role:
+        name: capsule-installer
+
