@@ -1,4 +1,10 @@
 ---
+
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+
 - name: Installing Satellite "{{ satellite_version }}" packages
   yum:
     name: satellite
