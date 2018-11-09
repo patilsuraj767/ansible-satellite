@@ -45,6 +45,9 @@
     name: http://{{ satellite_server }}/pub/katello-ca-consumer-latest.noarch.rpm
     state: present 
 
+- name: unregistering system from portal. 
+  command: subscription-manager unregister; subscription-manager clean;
+
 - name: Registering to satellite satellite
   command: subscription-manager register --username {{ satellite_username }} --password {{ satellite_password }} --org {{ organization_name }} --environment="Library" 
 
