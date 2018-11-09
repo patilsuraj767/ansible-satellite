@@ -63,7 +63,7 @@
 - name: Getting NIC details of the system.
   tags: nicdata
   uri:
-    url: "{{ rhevurl }}/vms/85580436-a634-452e-92af-f57928bbf941/nics"
+    url: "{{ rhevurl }}/vms/{{ vmid.matches[0].vm.id }}/nics"
     method: GET
     user: "{{ rhevusername }}"
     password: "{{ rhevpassword }}"   
@@ -115,5 +115,5 @@
   command: curl -k -X POST -H "Content-Type:application/json" -u inventoryuser:test http://172.17.0.5:8052/api/v2/inventories/2/hosts/ -d '{"name":"{{ hostname.msg }}"}' 
   args:
     warn: no
-    
+
 
