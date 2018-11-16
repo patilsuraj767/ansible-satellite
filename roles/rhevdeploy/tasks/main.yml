@@ -1,13 +1,21 @@
 ---
 # tasks file for rhevdeploy
 
+- include: selecthost.yml
+  loop: ["341b305a-e753-4ddf-bf17-218db846ce4d","15a40c8b-fe81-4d0a-a48f-0fff9f648698", "96532cc7-9476-4550-867b-63dfd31cb87c","efb81b1e-8a83-46c9-8976-e698adc9641c", "c22fafca-754a-4a6d-8d0c-22eae3397fad", "e9f8c9d0-6dc4-489e-ab14-9b2e868f415e", "e459bb7d-015f-4dd8-8e3e-e0b50bb04b8d", "80aea487-78af-4772-89d5-72a66e8f3067"]
+  tags: gethost
+
+- fail:
+    msg: "There is no Free Memory/RAM on RHEV"
+  when: var2 is not defined
+
 - name: Create VM on RHEV
   uri:
     url: "{{ rhevurl }}/vms"
     method: POST
     user: "{{ rhevusername }}"
     password: "{{ rhevpassword }}"
-    body: "<vm><name>{{ vmname }}</name><description>Satellite</description><cluster><name>Test</name></cluster><template><name>RHEL7.2</name></template><memory>9589934592</memory><os><boot><devices><device>hd</device></devices></boot></os></vm>"
+    body: "<vm><name>{{ vmname }}</name><description>Satellite</description><cluster><name>Test</name></cluster><template><name>RHEL7.2</name></template><memory>9589934592</memory><os><boot><devices><device>hd</device></devices></boot></os><placement_policy><affinity>migratable</affinity><hosts><host id={{var2}}/></hosts></placement_policy></vm>"
     return_content: yes
     status_code: 202, 200
     headers:
@@ -28,8 +36,12 @@
     seconds: 40
 
 - include: storagedomain.yml
-  loop: ["7649aea2-d87c-4066-acca-4399d5261ade","40cceee7-a8d3-45af-a2d0-70c414be32cc", "a81411b0-4ddb-4467-a4c6-ac9364905248","b288c547-231c-44b9-8329-98adcbdfc726", "8cdef991-3edc-4c35-9228-feeef8f29004", "837a2e1b-6365-4309-a526-0cd05801fe43", "8981bf82-a1da-405e-a7f5-d84f2c94d71d", 7a9e3904-e37b-48fd-b850-0f026dc5cde9]
+  loop: ["7649aea2-d87c-4066-acca-4399d5261ade","40cceee7-a8d3-45af-a2d0-70c414be32cc", "a81411b0-4ddb-4467-a4c6-ac9364905248","b288c547-231c-44b9-8329-98adcbdfc726", "8cdef991-3edc-4c35-9228-feeef8f29004", "837a2e1b-6365-4309-a526-0cd05801fe43", "8981bf82-a1da-405e-a7f5-d84f2c94d71d", "7a9e3904-e37b-48fd-b850-0f026dc5cde9"]
   tags: storagedomain
+
+- fail:
+    msg: "There is no Storage on RHEV"
+  when: var1 is not defined
 
 - name: API storage name. 
   uri:
