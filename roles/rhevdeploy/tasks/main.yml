@@ -15,7 +15,7 @@
     method: POST
     user: "{{ rhevusername }}"
     password: "{{ rhevpassword }}"
-    body: "<vm><name>{{ vmname }}</name><description>Satellite</description><cluster><name>Test</name></cluster><template><name>RHEL7.2</name></template><memory>9589934592</memory><os><boot><devices><device>hd</device></devices></boot></os><placement_policy><affinity>migratable</affinity><hosts><host id={{var2}}/></hosts></placement_policy></vm>"
+    body: "<vm><name>{{ vmname }}</name><description>Satellite</description><cluster><name>Test</name></cluster><template><name>RHEL7.2</name></template><memory>9589934592</memory><os><boot><devices><device>hd</device></devices></boot></os><placement_policy><affinity>migratable</affinity><hosts><host id='{{var2}}' /></hosts></placement_policy></vm>"
     return_content: yes
     status_code: 202, 200
     headers:
