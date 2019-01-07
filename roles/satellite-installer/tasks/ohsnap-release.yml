@@ -1,0 +1,12 @@
+---
+name: install dogfood RPM
+yum:
+  name: http://dogfood.sat.engineering.redhat.com/pub/katello-ca-consumer-latest.noarch.rpm
+  state: present
+
+- name: Registering and Subscribing System
+  redhat_subscription:
+    state: present
+    activationkey: "satellite-6.5.0-qa-rhel7"
+    org_id: "Sat6-CI"
+  
