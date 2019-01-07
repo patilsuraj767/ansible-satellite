@@ -1,8 +1,8 @@
 ---
-name: install dogfood RPM
-yum:
-  name: http://dogfood.sat.engineering.redhat.com/pub/katello-ca-consumer-latest.noarch.rpm
-  state: present
+- name: install dogfood RPM
+  yum:
+    name: http://dogfood.sat.engineering.redhat.com/pub/katello-ca-consumer-latest.noarch.rpm
+    state: present
 
 - name: Registering and Subscribing System
   redhat_subscription:
