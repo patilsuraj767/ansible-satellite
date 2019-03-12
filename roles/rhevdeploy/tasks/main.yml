@@ -95,7 +95,7 @@
       Content-type: "application/xml"
 
 - pause:
-    minutes: 2
+    minutes: 5
 
 - name: Getting NIC details of the system.
   tags: nicdata
