@@ -17,7 +17,7 @@
   - name: Retriving size.
     xml:
       xmlstring: "{{ cmd_stat.content }}"
-      xpath: /host/statistics/statistic/values/value/datum
+      xpath: /host/max_scheduling_memory
       content: text
     register: availablesize
     tags: gethost
@@ -25,11 +25,11 @@
 
   - name: storage_domain size
     debug:
-      var: availablesize.matches[2].datum
+      var: availablesize.matches[0].max_scheduling_memory
     tags: gethost
 
   - set_fact: var2={{item}}
-    when: availablesize.matches[2].datum | int > 15309411
+    when: availablesize.matches[0].max_scheduling_memory | int > 15309411
     tags: gethost
 
   when: var2 is not defined
