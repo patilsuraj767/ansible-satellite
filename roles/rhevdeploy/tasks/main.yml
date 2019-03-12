@@ -110,11 +110,15 @@
       Accept: "application/xml"
       Content-type: application/xml
   register: vmnicdata
+  
+- name: Nic details
+  debug:
+      var: vmnicdata
 
 - name: Retriving IP address of the system.
   xml:
     xmlstring: "{{ vmnicdata.content }}"
-    xpath: /nics/nic/reported_devices/reported_device/ips/ip/address
+    xpath: /nics/nic/reported_devices/reported_device/ips/ip[0]/address
     content: text
   register: vmnicip
   tags: nicdata
