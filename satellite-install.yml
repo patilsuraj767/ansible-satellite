@@ -3,11 +3,11 @@
   gather_facts: no
   tasks:
     - name: Deploy VM
-      tags: deploy-vm  
+      tags: deploy-vm   
       include_role:
         name: rhevdeploy
       
-- hosts: "{{ hostvars['localhost']['hostname'].msg }}"
+- hosts: "{{ hostvars['localhost']['vmnicip'].matches[0].address }}"
   tasks:
     - name: configure VM for installing satellite 
       tags: configure-vm

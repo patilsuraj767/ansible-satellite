@@ -108,11 +108,6 @@
   debug:
       var: vmnicip.matches[0].address
 
-- name: Perforing reverse-dns and getting the hostname
-  debug: msg="{{ lookup('dig', ''~vmnicip.matches[0].address~'/PTR') }}"
-  register: hostname
-  tags: nicdata
-
 - name: Adding system to the Ansible Inventory.
   add_host:
-    name: "{{ hostname.msg }}"
+    name: "{{ vmnicip.matches[0].address }}"
