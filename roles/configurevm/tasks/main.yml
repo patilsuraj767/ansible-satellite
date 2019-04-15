@@ -21,9 +21,11 @@
 
 # hostname.msg variable is shared from role rhevdeploy, Need to improve the logic of getting hostname. 
 # Also, unable to use hostname module as hostvars['localhost']['hostname'].msg return the hostname with "." at the end. 
-- name: Setting hostname to "{{ hostvars['localhost']['hostname'].msg }}"
-  command: hostnamectl set-hostname "{{ hostvars['localhost']['hostname'].msg }}"
+- name: Setting hostname to satellite"{{ satellite_version }}".example.com
+  command: hostnamectl set-hostname satellite"{{ satellite_version }}".example.com
   tags: set-hostname
-  
+
+- name: Adding host to /etc/hosts
+  command: echo '"{{ hostvars['localhost']['vmnicip'].matches[0].address }}" satellite"{{ satellite_version }}".example.com' >> /etc/hosts
 
 

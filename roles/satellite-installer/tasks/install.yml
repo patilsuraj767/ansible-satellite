@@ -23,5 +23,5 @@
   when: satellite_version == "6.3" or satellite_version == "6.4"
 
 - name: Running the satellite-installer for 6.5
-  command: satellite-installer --scenario satellite 
+  command: satellite-installer --scenario satellite --foreman-initial-organization "RedHat" --foreman-initial-location "Pune" --foreman-admin-username admin --foreman-admin-password redhat --foreman-proxy-dns-managed=false --foreman-proxy-dhcp-managed=false --disable-system-checks
   when: satellite_version == "6.5"
