@@ -2,18 +2,13 @@
 - hosts: localhost
   gather_facts: no
   tasks:
-    - name: Deploy VM
-      tags: deploy-vm  
-      include_role:
-        name: rhevdeploy
+    # This is just to dynamically add the host to the inventory
+    - name: Adding system to the Ansible Inventory.  
+      add_host:
+        name: "{{ hostname }}"
       
-- hosts: "{{ hostvars['localhost']['hostname'].msg }}"
+- hosts: "{{ hostvars['localhost']['hostname'] }}"
   tasks:
-    - name: configure VM for installing satellite 
-      tags: configure-vm
-      include_role:
-        name: configurevm
-
     - name: Installing satellite
       tags: satellite-installer
       include_role:

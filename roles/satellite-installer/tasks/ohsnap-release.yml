@@ -7,6 +7,6 @@
 - name: Registering and Subscribing System
   redhat_subscription:
     state: present
-    activationkey: "satellite-6.5.0-qa-rhel7"
+    activationkey: "satellite-{{ satellite_version }}.0-qa-rhel7"
     org_id: "Sat6-CI"
   
