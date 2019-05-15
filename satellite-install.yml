@@ -5,9 +5,9 @@
     # This is just to dynamically add the host to the inventory
     - name: Adding system to the Ansible Inventory.  
       add_host:
-        name: "{{ hostname }}"
+        name: "{{ satellite_hostname }}"
       
-- hosts: "{{ hostvars['localhost']['hostname'] }}"
+- hosts: "{{ hostvars['localhost']['satellite_hostname'] }}"
   tasks:
     - name: Installing satellite
       tags: satellite-installer
