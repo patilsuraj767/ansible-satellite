@@ -22,4 +22,4 @@
 - name: Enabling Ansible repository
   rhsm_repository:
     name: rhel-7-server-ansible-2.6-rpms,rhel-7-server-satellite-maintenance-6-rpms
-  when: satellite_version == "6.4"
+  when: satellite_version == "6.4" or satellite_version == "6.5"
