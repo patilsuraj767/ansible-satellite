@@ -23,14 +23,15 @@
   yum:
     name: '*'
     state: latest
-  when: version_type == "Offical"
+  when: version_type == "Official"
 
 - name: Installing Satellite "{{ satellite_version }}" packages
   yum:
     name: satellite
     state: latest
 
-- pause:
+- name: Pause of 30sec
+  pause:
     seconds: 30
 
 - name: Running the satellite-installer for 6.2
@@ -40,3 +41,7 @@
 - name: Running the satellite-installer for 6.3/6.4
   command: satellite-installer --scenario satellite --foreman-initial-organization "RedHat" --foreman-initial-location "Pune" --foreman-admin-username admin --foreman-admin-password redhat --foreman-proxy-dns-managed=false --foreman-proxy-dhcp-managed=false --disable-system-checks
   when: satellite_version == "6.3" or satellite_version == "6.4" or satellite_version == "6.5"
+
+- name: Running the satellite-installer for 6.3/6.4
+  command: satellite-installer --scenario satellite --foreman-initial-organization "RedHat" --foreman-initial-location "Pune" --foreman-initial-admin-username admin --foreman-initial-admin-password redhat --disable-system-checks
+  when: satellite_version == "6.6" or satellite_version == "6.7"

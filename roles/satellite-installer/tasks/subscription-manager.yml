@@ -12,14 +12,23 @@
 
 - name: Enabling required repository
   rhsm_repository:
-    name: rhel-7-server-rpms,rhel-server-rhscl-7-rpms,rhel-7-server-satellite-{{ satellite_version }}-rpms
+    name: rhel-7-server-rpms,rhel-server-rhscl-7-rpms,rhel-7-server-satellite-maintenance-6-rpms,rhel-7-server-satellite-{{ satellite_version }}-rpms
+    state: enabled
 
 - name: Enabling puppet 4 repository for 6.3
   rhsm_repository:
     name: rhel-7-server-satellite-{{ satellite_version }}-puppet4-rpms
+    state: enabled
   when: satellite_version == "6.3"
 
 - name: Enabling Ansible repository
   rhsm_repository:
-    name: rhel-7-server-ansible-2.6-rpms,rhel-7-server-satellite-maintenance-6-rpms
+    name: rhel-7-server-ansible-2.6-rpms
+    state: enabled
   when: satellite_version == "6.4" or satellite_version == "6.5"
+
+- name: Enabling Ansible 2.8 repository
+  rhsm_repository:
+    name: rhel-7-server-ansible-2.8-rpms
+    state: enabled
+  when: satellite_version == "6.6" or satellite_version == "6.7"

@@ -1,7 +1,7 @@
 ---
 # tasks file for satellite-installer
 - import_tasks: subscription-manager.yml
-  when: version_type == "Offical"
+  when: version_type == "Official"
   tags: subscription-manager
 
 - import_tasks: ohsnap-release.yml
