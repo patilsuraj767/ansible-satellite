@@ -32,3 +32,9 @@
     name: rhel-7-server-ansible-2.8-rpms
     state: enabled
   when: satellite_version == "6.6" or satellite_version == "6.7"
+
+- name: Enabling Ansible 2.9 repository
+  rhsm_repository:
+    name: rhel-7-server-ansible-2.9-rpms
+    state: enabled
+  when: satellite_version == "6.8"
